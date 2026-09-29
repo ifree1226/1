@@ -8,7 +8,6 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
-CASES = ("straight", "factcheck", "inquiry")
 
 
 def read(path: Path) -> str:
@@ -34,8 +33,12 @@ def main() -> int:
     parser.add_argument("--after", type=Path, required=True, help="변경 후 출력 폴더")
     args = parser.parse_args()
 
+    cases = sorted(path.stem for path in (ROOT / "prompts").glob("*.md"))
+    if not cases:
+        parser.error("비교할 프롬프트가 없습니다")
+
     missing = []
-    for case in CASES:
+    for case in cases:
         paths = (
             ROOT / "prompts" / f"{case}.md",
             ROOT / "fixtures" / f"{case}.json",
@@ -47,7 +50,7 @@ def main() -> int:
     if missing:
         parser.error("필요한 파일이 없습니다:\n" + "\n".join(missing))
 
-    for case in CASES:
+    for case in cases:
         fixture = json.loads(read(ROOT / "fixtures" / f"{case}.json"))
         if fixture.get("id") != case or fixture.get("synthetic") is not True:
             parser.error(f"{case}: 가상 사례 id/synthetic를 확인하세요")
