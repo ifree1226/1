@@ -1,0 +1,18 @@
+# 실제 실행 결과와 로컬 설정
+runs/
+.env
+.env.*
+!.env.example
+*.log
+__pycache__/
+*.py[cod]
+.DS_Store
+
+# 원본·비공개 취재자료는 공개 저장소에 넣지 않음
+private/
+raw/
+sources/
+*.hwp
+*.hwpx
+*.pdf
+*.docx
